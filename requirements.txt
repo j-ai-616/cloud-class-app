@@ -1,0 +1,4 @@
+Django>=5.2,<6.0
+gunicorn>=23.0,<24.0; platform_system != "Windows"
+psycopg[binary]>=3.2,<4.0
+boto3>=1.35,<2.0

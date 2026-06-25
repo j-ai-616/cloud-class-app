@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cloud Class</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #17202a;
+      background: #f4f6f7;
+    }
+    main {
+      width: min(720px, calc(100% - 40px));
+      margin: 80px auto;
+    }
+    h1 { margin-bottom: 8px; }
+    .status {
+      margin-top: 28px;
+      padding: 20px;
+      border: 1px solid #d5d8dc;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+    dt { margin-top: 12px; font-weight: bold; }
+    dd { margin: 4px 0 0; }
+    a { color: #0b6e4f; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Cloud Class CI/CD</h1>
+    <p>테스트를 통과한 Django 애플리케이션을 컨테이너로 실행한다.</p>
+
+    <section class="status">
+      <h2>실행 정보</h2>
+      <dl>
+        <dt>환경</dt>
+        <dd>{{ environment }}</dd>
+        <dt>버전</dt>
+        <dd>{{ version }}</dd>
+      </dl>
+      <p><a href="/api/info/">JSON 정보 확인</a></p>
+    </section>
+  </main>
+</body>
+</html>

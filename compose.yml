@@ -1,0 +1,49 @@
+# Docker Compose에서 실행할 서비스들을 정의한다.
+services:
+  # Django 애플리케이션 컨테이너 서비스이다.
+  web:
+    # 로컬에서 이미지를 빌드할 때 사용할 설정이다.
+    build:
+      # 현재 디렉터리를 Docker build context로 사용한다.
+      context: .
+
+    # 실행할 이미지 이름이다.
+    # APP_IMAGE 환경 변수가 있으면 그 값을 사용하고,
+    # 없으면 cloud-class-app:local 이미지를 사용한다.
+    image: ${APP_IMAGE:-cloud-class-app:local}
+
+    # 생성될 컨테이너 이름을 고정한다.
+    container_name: cloud-class-web
+
+    # 컨테이너가 비정상 종료되거나 Docker가 재시작되면 자동으로 다시 실행한다.
+    # 단, 사용자가 직접 중지한 경우에는 다시 시작하지 않는다.
+    restart: unless-stopped
+
+    # 컨테이너에 주입할 환경 변수 파일이다.
+    # APP_ENV_FILE 값이 있으면 그 파일을 사용하고,
+    # 없으면 로컬 개발용 .env.local 파일을 사용한다.
+    env_file:
+      - ${APP_ENV_FILE:-.env.local}
+
+    # 호스트 포트와 컨테이너 포트를 연결한다.
+    # 호스트의 127.0.0.1:8000 요청을 컨테이너의 8000번 포트로 전달한다.
+    # 외부 전체 공개가 아니라 로컬에서만 접근 가능하게 묶는다.
+    ports:
+      - "127.0.0.1:8000:8000"
+
+    # 컨테이너가 정상 동작 중인지 Docker가 주기적으로 확인하는 설정이다.
+    healthcheck:
+      # 컨테이너 내부에서 /health/ URL을 호출해 정상 응답 여부를 확인한다.
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health/"]
+
+      # 30초마다 상태 확인을 실행한다.
+      interval: 30s
+
+      # 3초 안에 응답하지 않으면 실패로 본다.
+      timeout: 3s
+
+      # 3번 연속 실패하면 unhealthy 상태로 판단한다.
+      retries: 3
+
+      # 컨테이너 시작 후 20초 동안은 준비 시간으로 보고 실패를 바로 반영하지 않는다.
+      start_period: 20s
